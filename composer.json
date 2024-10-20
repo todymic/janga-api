@@ -1,0 +1,25 @@
+{
+    "name": "janga/api",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "type": "cakephp-plugin",
+    "config": {
+        "secure-http": false,
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "authors": [
+        {
+            "name": "Raza",
+            "email": "email@example.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "extra": {
+        "installer-name": "ui"
+    }
+}
