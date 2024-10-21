@@ -15,9 +15,9 @@ import {Speciality} from "./Speciality";
 import {PractitionerSpecialities} from "./PractitionerSpecialities";
 import {PractitionerLanguages} from "./PractitionerLanguages";
 import {Office} from "./Office";
-import Person, {IPerson} from "./common/Person";
+import User, {UserInterface} from "./common/User";
 
- export interface IPractitioner extends IPerson {
+ export interface IPractitioner extends UserInterface {
     degrees?: string;
     languages?: Language[] |null;
     specialities?: Speciality[] | null;
@@ -33,7 +33,7 @@ import Person, {IPerson} from "./common/Person";
         exclude: [ 'officeId', 'createdAt', 'updatedAt']
     }
 }))
-export class Practitioner extends Person implements IPractitioner {
+export class Practitioner extends User implements IPractitioner {
 
     @BelongsToMany(() => Language, () => PractitionerLanguages)
     languages?: Array<Language & {PractitionerLanguages: PractitionerLanguages}>;
