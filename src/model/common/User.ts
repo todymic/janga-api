@@ -26,7 +26,7 @@ export class User extends Model implements UserInterface {
     @Column({allowNull: false, unique: true})
     email!: string;
 
-    @Column({allowNull: false, defaultValue: '0'})
+    @Column({allowNull: false, defaultValue: '1'})
     active!: boolean;
 
     @Column({
@@ -37,7 +37,6 @@ export class User extends Model implements UserInterface {
 
     @Column({allowNull: false})
     password!: string;
-
 
     @Column({
         type: DataType.JSON,

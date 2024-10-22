@@ -15,7 +15,7 @@ import {Speciality} from "./Speciality";
 import {PractitionerSpecialities} from "./PractitionerSpecialities";
 import {PractitionerLanguages} from "./PractitionerLanguages";
 import {Office} from "./Office";
-import {UserInterface} from "./common/User";
+import {User, UserInterface} from "./common/User";
 
  export interface IPractitioner extends UserInterface {
     degrees?: string[];
@@ -38,36 +38,7 @@ import {UserInterface} from "./common/User";
 }))
 
 
-export class Practitioner extends Model implements IPractitioner {
-
-    @Column({allowNull: false})
-    firstname!: string;
-
-    @Column({allowNull: false})
-    lastname!: string;
-
-    @Column({allowNull: false, unique: true})
-    email!: string;
-
-    @Column({allowNull: false, defaultValue: '0'})
-    active!: boolean;
-
-    @Column({
-        type: DataType.TEXT,
-        allowNull: true,
-    })
-    description!: string;
-
-    @Column({allowNull: false})
-    password!: string;
-
-
-    @Column({
-        type: DataType.JSON,
-        allowNull: false,
-        defaultValue: ['ROLE_PRACTITIONER']
-    })
-    roles!: string[];
+export class Practitioner extends User implements IPractitioner {
 
     @BelongsToMany(() => Language, () => PractitionerLanguages)
     languages?: Array<Language & {PractitionerLanguages: PractitionerLanguages}>;
@@ -91,4 +62,10 @@ export class Practitioner extends Model implements IPractitioner {
 
     @BelongsTo(() => Office)
     office!: Office
+
+
+    @BeforeCreate
+    static setRoles(instance: Practitioner) {
+        instance.roles = ['ROLE_PRACTITIONER'];
+    }
 }

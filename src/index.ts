@@ -35,48 +35,48 @@ class App {
     private connectDB(): void {
         const db = new Database();
         db.sequelize?.sync({force: true})
-            .then(() => {
-
-            const repoOffice = new OfficeRepository();
-
-            Office.create({
-                "name": faker.person.jobTitle(),
-                "street": faker.location.street(),
-                "city": faker.location.city(),
-                "zipcode": faker.location.zipCode(),
-                "country": faker.location.country()
-            }).then((office) => {
-                const languages = faker.helpers.multiple(createLanguages, {
-                    count: 5,
-                });
-
-                Language.bulkCreate(languages).then();
-
-                const specialities = faker.helpers.multiple(createSpecialities, {
-                    count: 5,
-                });
-
-                Speciality.bulkCreate(specialities).then();
-
-
-                Practitioner.create({
-                    "firstname": faker.person.firstName(),
-                    "lastname": faker.person.lastName(),
-                    "description": faker.person.bio(),
-                    "email": faker.internet.email(),
-                    "active": true,
-                    "password": "password",
-                    "officeId": office.id,
-                    "roles": ['ROLE_USER', 'ROLE _ADMIND'],
-                    "degrees": ['ROLE_USER', 'ROLE _ADMIND'],
-                    "availabilities":['sfdfsdf','fsdfsdf'],
-                    "languages": languages,
-                    specialities: specialities
-                }).then(() => 'ok')
-            });
-
-
-        })
+        //     .then(() => {
+        //
+        //     const repoOffice = new OfficeRepository();
+        //
+        //     Office.create({
+        //         "name": faker.person.jobTitle(),
+        //         "street": faker.location.street(),
+        //         "city": faker.location.city(),
+        //         "zipcode": faker.location.zipCode(),
+        //         "country": faker.location.country()
+        //     }).then((office) => {
+        //         const languages = faker.helpers.multiple(createLanguages, {
+        //             count: 5,
+        //         });
+        //
+        //         Language.bulkCreate(languages).then();
+        //
+        //         const specialities = faker.helpers.multiple(createSpecialities, {
+        //             count: 5,
+        //         });
+        //
+        //         Speciality.bulkCreate(specialities).then();
+        //
+        //
+        //         Practitioner.create({
+        //             "firstname": faker.person.firstName(),
+        //             "lastname": faker.person.lastName(),
+        //             "description": faker.person.bio(),
+        //             "email": faker.internet.email(),
+        //             "active": true,
+        //             "password": "password",
+        //             "officeId": office.id,
+        //             "roles": ['ROLE_USER', 'ROLE _ADMIND'],
+        //             "degrees": ['ROLE_USER', 'ROLE _ADMIND'],
+        //             "availabilities":['sfdfsdf','fsdfsdf'],
+        //             "languages": languages,
+        //             specialities: specialities
+        //         }).then(() => 'ok')
+        //     });
+        //
+        //
+        // })
 
     }
 
