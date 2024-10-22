@@ -2,6 +2,7 @@ import {Speciality} from "../model/Speciality";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {Service} from "typedi";
 import {Language} from "../model/Language";
+import {BaseRepository} from "./base.repository";
 
 interface SpecialityRepoInterface {
     save(reqSpeciality: Speciality): Promise<Speciality>;
@@ -16,62 +17,36 @@ interface SpecialityRepoInterface {
 }
 
 @Service()
-export class SpecialityRepository implements SpecialityRepoInterface {
+export class SpecialityRepository extends BaseRepository<Speciality> {
 
-    async delete(specialityId: number): Promise<void> {
-
-        const speciality = await Speciality.findOne({where: {id: specialityId}});
-
-        if (!speciality) {
-            throw new NotFoundException("Speciality not found");
-        }
-
-        await speciality.destroy();
-    }
-
-    async getAll(where?: object): Promise<Speciality[]> {
-        return await Speciality.findAll(where);
-    }
-
-    async getById(specialityId: number): Promise<Speciality> {
-
-        const speciality = await Speciality.findOne({where: {id: specialityId}});
-
-        if (!speciality) {
-            throw new NotFoundException(`Speciality ID ${specialityId} not found`);
-        }
-
-        return speciality;
+    constructor() {
+        super(Speciality);
     }
 
     async save(reqSpeciality: Speciality): Promise<Speciality> {
 
-        let newSpeciality = {
-            name: reqSpeciality.name
-        }
+        let newSpeciality = new Speciality();
+        newSpeciality.name = reqSpeciality.name
 
-        return await Speciality.create(newSpeciality)
+        return newSpeciality.save();
 
     }
 
     async update(id: number, speciality: Speciality): Promise<Speciality> {
 
-        return Speciality.findOne({
-            where: {
-                id: id
-            }
-        }).then((existSpeciality) => {
+        return Speciality.findByPk(id)
+            .then((existSpeciality) => {
 
-            if(!existSpeciality) {
-                throw new NotFoundException(`Speciality with id ${id} not found`);
-            }
+                if (!existSpeciality) {
+                    throw new NotFoundException(`Speciality with id ${id} not found`);
+                }
 
-            existSpeciality.name = speciality.name
-            return existSpeciality.save({
-                validate: false
+                existSpeciality.name = speciality.name
+                return existSpeciality.save({
+                    validate: false
+                })
+
             })
-
-        })
 
     }
 }

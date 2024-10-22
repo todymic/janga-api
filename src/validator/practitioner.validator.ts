@@ -11,24 +11,12 @@ export const practitionerPayload = [
     body('email')
         .notEmpty()
         .isEmail().withMessage('email is empty or invalid'),
+    body('password')
+        .notEmpty()
+        .withMessage('password is empty'),
     body('officeId')
         .optional()
         .isNumeric().withMessage('office Id must be a number'),
-    // body('office.name')
-    //     .notEmpty()
-    //     .isString().withMessage('office name is required'),
-    // body('office.street')
-    //     .notEmpty().withMessage('office street is required')
-    //     .isString().withMessage('office street must be a string'),
-    // body('office.city')
-    //     .notEmpty().withMessage('office city is required')
-    //     .isString().withMessage('office city must be a string'),
-    // body('office.zipcode')
-    //     .notEmpty().withMessage('office zipcode is required')
-    //     .isString().withMessage('office zipcode must be a string'),
-    // body('office.country')
-    //     .notEmpty()
-    //     .isString().withMessage('office country  is required'),
     body('specialities')
         .notEmpty().withMessage('specialities is required')
         .isArray().withMessage('specialities must be an array of IDs'),

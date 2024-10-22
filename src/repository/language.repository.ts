@@ -2,61 +2,25 @@ import {Sequelize} from "sequelize-typescript";
 import {Language} from "../model/Language";
 import {Service} from "typedi";
 import {NotFoundException} from "../exceptions/NotFoundException";
+import {BaseRepository} from "./base.repository";
 
-export interface LanguageRepoInterface {
 
-    save(reqLanguage: Language): Promise<Language>;
-
-    getById(LanguageId: number): Promise<Language>;
-
-    getAll(where?: object): Promise<Language[]>;
-
-    update(id: number, language: Language): Promise<Language>;
-
-    delete(languageId: number): Promise<void>;
-
-}
 
 @Service()
-export class LanguageRepository implements LanguageRepoInterface {
+export class LanguageRepository extends BaseRepository<Language> {
 
-    async delete(languageId: number): Promise<void> {
-
-        await Language.findOne({where: {id: languageId}})
-            .then((language: Language | null) => {
-
-                if (!language) {
-                    throw new NotFoundException(`Language ${languageId} not found`);
-                }
-
-                language.destroy();
-            });
-    }
-
-    async getAll(where?: object): Promise<Language[]> {
-        return await Language.findAll(where);
-    }
-
-    async getById(languageId: number): Promise<Language> {
-
-        return await Language.findOne({where: {id: languageId}})
-            .then((language: Language | null) => {
-
-                if (!language) {
-                    throw new NotFoundException(`Language ${languageId} not found`);
-                }
-
-                return language;
-            });
-
+    constructor() {
+        super(Language);
     }
 
     async save(reqLanguage: Language): Promise<Language> {
 
-        return await Language.create({
+        const language = {
             name: reqLanguage.name,
             code: reqLanguage.code
-        })
+        }
+
+        return super.save(language as Language)
     }
 
     async update(id: number, language: Language): Promise<Language> {

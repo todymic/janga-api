@@ -1,66 +1,28 @@
 import {Office} from "../model/Office";
 import {Service} from "typedi";
 import {NotFoundException} from "../exceptions/NotFoundException";
-
-interface OfficeRepoInterface {
-
-    save(reqOffice: Office): Promise<Office>;
-
-    getById(officeId: number): Promise<Office>;
-
-    getAll(): Promise<Office[]>;
-
-    update(id: number, office: Office): Promise<Office>;
-
-    delete(officeId: number): Promise<void>;
-
-}
+import {BaseRepository} from "./base.repository";
+import {Model} from "sequelize-typescript";
 
 @Service()
-export class OfficeRepository implements OfficeRepoInterface {
+export class OfficeRepository extends BaseRepository<Office> {
 
-    async delete(OfficeId: number): Promise<void> {
-
-        await Office.findOne({where: {id: OfficeId}})
-            .then((office: Office | null) => {
-
-                if (!office) {
-                    throw new NotFoundException(`Office ID ${OfficeId} not found`);
-                }
-
-                office.destroy();
-            });
-
-
+    constructor() {
+        super(Office);
     }
 
-    async getAll(where?: undefined): Promise<Office[]> {
-        return await Office.findAll(where);
-    }
-
-    async getById(officeId: number): Promise<Office> {
-
-        return await Office.findOne({where: {id: officeId}})
-            .then((office: Office | null) => {
-
-                if (!office) {
-                    throw new NotFoundException(`Office ${officeId} not found`);
-                }
-
-                return office;
-            });
-
-    }
 
     async save(reqOffice: Office): Promise<Office> {
 
-        return await Office.create({
+        const office = {
             name: reqOffice.name,
             street: reqOffice.street,
             zipcode: reqOffice.zipcode,
             city: reqOffice.city,
             country: reqOffice.country,
-        });
+        };
+
+        return await super.save(office as Office);
 
     }
 

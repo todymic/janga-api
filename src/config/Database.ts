@@ -7,8 +7,7 @@ import {Speciality} from "../model/Speciality";
 import {PractitionerLanguages} from "../model/PractitionerLanguages";
 import {Patient} from "../model/Patient";
 import {Office} from "../model/Office";
-import {PractitionerRepository} from "../repository/practitioner.repository";
-import {OfficeRepository} from "../repository/office.repository";
+import User from "../model/common/User";
 
 dotenv.config();
 export class Database {
@@ -41,7 +40,8 @@ export class Database {
                     Speciality,
                     PractitionerLanguages,
                     Patient,
-                    Office
+                    Office,
+                    User
                 ],
 
             });

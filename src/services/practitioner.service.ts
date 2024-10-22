@@ -1,5 +1,5 @@
 import {Inject, Service} from "typedi";
-import {Practitioner} from "../model/Practitioner";
+import {IPractitioner, Practitioner} from "../model/Practitioner";
 import {PractitionerRepository} from "../repository/practitioner.repository";
 import {Language} from "../model/Language";
 import {Speciality} from "../model/Speciality";
@@ -15,9 +15,13 @@ export interface PractitionerRequest {
     description: string,
     email: string,
     active: boolean,
+    password: string,
     officeId: number,
-    languages?: Array<Number>
-    specialities?: Array<Number>
+    languages?: number[]
+    specialities?: number[],
+    degrees: string[],
+    roles?: string[],
+    availabilities: string[]
 }
 
 @Service()
@@ -40,7 +44,8 @@ export class PractitionerService {
                 if (existingPractitioner) {
                     throw new AlreadyExistException(`The email ${bodyRequest.email} already exists!`);
                 }
-                return this.practitionerRepository.save(bodyRequest as Practitioner)
+
+                return this.practitionerRepository.save(bodyRequest)
                     .then((newPractitioner) => {
 
                         return this.setRelations(bodyRequest, newPractitioner);
@@ -52,20 +57,12 @@ export class PractitionerService {
 
     async updatePractitioner(id: number, bodyRequest: PractitionerRequest): Promise<Practitioner> {
 
-        return this.practitionerRepository.getById(id)
-            .then(async (practitioner: Practitioner | null) => {
+        return await this.practitionerRepository.update(id, bodyRequest)
+            .then((practitioner) => {
 
-                if (!practitioner) {
-                    throw new NotFoundException(`Practitioner ID ${id} is not found`);
-                }
+                return this.setRelations(bodyRequest, practitioner);
 
-                return await this.practitionerRepository.update(practitioner, bodyRequest as Practitioner)
-                    .then((practitioner) => {
-
-                        return this.setRelations(bodyRequest, practitioner);
-
-                    });
-            })
+            });
     }
 
      private async setRelations(bodyRequest: PractitionerRequest, practitioner: Practitioner): Promise<Practitioner>

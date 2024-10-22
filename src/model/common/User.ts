@@ -1,4 +1,5 @@
-import {Column, DataType, Model, Sequelize} from "sequelize-typescript";
+import {Column, DataType, HasOne, Model, Sequelize, Table} from "sequelize-typescript";
+import {Practitioner} from "../Practitioner";
 
 export interface UserInterface {
     firstname: string;
@@ -10,7 +11,11 @@ export interface UserInterface {
     roles: string[];
 }
 
-abstract class User extends Model implements UserInterface {
+
+@Table({
+    tableName: "user"
+})
+export class User extends Model implements UserInterface {
 
     @Column({allowNull: false})
     firstname!: string;
@@ -35,11 +40,12 @@ abstract class User extends Model implements UserInterface {
 
 
     @Column({
-        type: DataType.ARRAY(DataType.STRING),
+        type: DataType.JSON,
         allowNull: false,
         defaultValue: ['ROLE_USER']
     })
     roles!: string[];
 }
+
 
 export default User

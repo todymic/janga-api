@@ -1,12 +1,13 @@
-import {Sequelize} from "sequelize-typescript";
-import {Practitioner} from "../model/Practitioner";
+import {IPractitioner, Practitioner} from "../model/Practitioner";
 import {Office} from "../model/Office";
 import {Language} from "../model/Language";
 import {Speciality} from "../model/Speciality";
 import {Op} from "sequelize";
-import slugify from "slugify";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {Service} from "typedi";
+import {BaseRepository} from "./base.repository";
+import User from "../model/common/User";
+import {PractitionerRequest} from "../services/practitioner.service";
 
 interface PractitionerRepoInterface {
 
@@ -23,70 +24,60 @@ interface PractitionerRepoInterface {
 
 
 @Service()
-export class PractitionerRepository implements PractitionerRepoInterface {
+export class PractitionerRepository extends BaseRepository<Practitioner> {
 
-    async delete(practitionerId: number): Promise<void> {
+    constructor() {
+        super(Practitioner);
+    }
 
-        await Practitioner.findOne({where: {id: practitionerId}})
+    async save(reqPractitioner: PractitionerRequest): Promise<Practitioner> {
+
+        let newPractitioner = {
+            firstname: reqPractitioner.firstname,
+            lastname: reqPractitioner.lastname,
+            email: reqPractitioner.email,
+            description: reqPractitioner.description,
+            password: reqPractitioner.password,
+            roles: ['ROLE_PRACTITIONER'],
+            active: true,
+            degrees: reqPractitioner.degrees,
+            availabilities: reqPractitioner.availabilities,
+            officeId: reqPractitioner.officeId,
+        };
+
+
+        return await Practitioner.create(newPractitioner);
+
+    }
+
+    override async  update(id: number, newData: any): Promise<Practitioner> {
+
+        return await super.getById(id)
             .then((practitioner: Practitioner | null) => {
+
                 if (!practitioner) {
-                    throw new NotFoundException(`Practitioner ${practitionerId} not found`);
+                    throw new NotFoundException(`Practitioner ${id} not found `);
                 }
 
-                practitioner.destroy();
-            });
-    }
+                practitioner.degrees = newData.degrees;
+                practitioner.availabilities = newData.availabilities;
+                practitioner.firstname = newData.firstname;
+                practitioner.lastname = newData.lastname;
+                practitioner.description = newData.description;
 
-    async getAll(where?: object): Promise<Practitioner[]> {
+                if(newData.password) {
+                    practitioner.password = newData.password;
+                }
 
-        return await Practitioner.findAll({
-            include: [ Office, Speciality, Language ]
-        });
-    }
+                if(newData.email) {
+                    practitioner.email = newData.email;
+                }
 
-    async getById(practitionerId: number): Promise<Practitioner> {
-
-        return await Practitioner
-            .findByPk(practitionerId, {
-                include: [ Office, Speciality, Language ]
+                practitioner.password = newData.password;
+                practitioner.roles = ['ROLE_PRACTITIONER'];
+                practitioner.active = true;
+                return practitioner.save();
             })
-            .then((practitioner: Practitioner | null) => {
-
-                if (!practitioner) {
-                    throw new NotFoundException(`Practitioner ${practitionerId} not found`);
-                }
-
-                return practitioner;
-            });
-
-
-    }
-
-    async save(reqPractitioner: Practitioner): Promise<Practitioner> {
-
-        let newPractitioner = new Practitioner();
-
-        newPractitioner.firstname = reqPractitioner.firstname;
-        newPractitioner.lastname = reqPractitioner.lastname;
-        newPractitioner.email = reqPractitioner.email;
-        newPractitioner.description = reqPractitioner.description;
-        newPractitioner.active = reqPractitioner.active;
-        newPractitioner.officeId = reqPractitioner.officeId;
-
-
-        return await newPractitioner.save();
-    }
-
-    async update(practitioner: Practitioner, newData: Practitioner): Promise<Practitioner> {
-
-        practitioner.firstname = newData.firstname;
-        practitioner.lastname = newData.lastname;
-        practitioner.email = newData.email;
-        practitioner.description = newData.description;
-        practitioner.active = newData.active;
-        practitioner.officeId = newData.officeId;
-
-        return practitioner.update(practitioner);
 
     }
 
@@ -103,7 +94,7 @@ export class PractitionerRepository implements PractitionerRepoInterface {
 
 
     async findByEmail(email: string) {
-       return await Practitioner.findOne({
+        return await Practitioner.findOne({
             where: {
                 email: email
             }
