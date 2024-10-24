@@ -2,6 +2,7 @@ import {User} from "../model/common/User";
 import {BaseRepository} from "./base.repository";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {Service} from "typedi";
+import {Op} from "sequelize";
 
 
 @Service()
@@ -25,34 +26,43 @@ export class UserRepository extends BaseRepository<User> {
 
     async update(id: number, newData: User): Promise<User> {
 
-       return super.getById(id)
-           .then((user: User| null) => {
+        return super.getById(id)
+            .then((user: User | null) => {
 
-            if(!user) {
-                throw new NotFoundException(`User ${id} not found`);
-            }
+                if (!user) {
+                    throw new NotFoundException(`User ${id} not found`);
+                }
 
-            user.firstname = newData.firstname;
-            user.lastname = newData.lastname;
+                user.firstname = newData.firstname;
+                user.lastname = newData.lastname;
 
-            if(newData.email) {
-                user.email = newData.email;
-            }
+                if (newData.email) {
+                    user.email = newData.email;
+                }
 
-            if(newData.password) {
-                user.password = newData.password;
-            }
+                if (newData.password) {
+                    user.password = newData.password;
+                }
 
-            user.description = newData.description;
+                user.description = newData.description;
 
-            if(newData.active) {
-                user.active = newData.active;
-            }
+                if (newData.active) {
+                    user.active = newData.active;
+                }
 
-            user.roles = newData.roles;
+                user.roles = newData.roles;
 
-            return user.save();
-        })
+                return user.save();
+            })
     }
 
+    async login(email: string, password: string): Promise<User | null> {
+
+        return await User.findOne({
+            where: {
+                email: email,
+                password: password
+            }
+        })
+    }
 }

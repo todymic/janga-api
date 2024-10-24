@@ -1,5 +1,10 @@
-import {Column, DataType, HasOne, Model, Sequelize, Table} from "sequelize-typescript";
+import {BeforeCreate, Column, DataType, DefaultScope, HasOne, Model, Sequelize, Table} from "sequelize-typescript";
 import {Practitioner} from "../Practitioner";
+import {before} from "node:test";
+import bcrypt from "bcryptjs";
+import {Office} from "../Office";
+import {Language} from "../Language";
+import {Speciality} from "../Speciality";
 
 export interface UserInterface {
     firstname: string;
@@ -15,6 +20,11 @@ export interface UserInterface {
 @Table({
     tableName: "user"
 })
+@DefaultScope(() => ({
+    attributes: {
+        exclude: [ 'password', 'createdAt', 'updatedAt']
+    }
+}))
 export class User extends Model implements UserInterface {
 
     @Column({allowNull: false})
@@ -44,6 +54,12 @@ export class User extends Model implements UserInterface {
         defaultValue: ['ROLE_USER']
     })
     roles!: string[];
+
+    @BeforeCreate
+    static async hashPassword(instance: User) {
+        instance.password = await bcrypt.hash(instance.password, 8)
+
+    }
 }
 
 

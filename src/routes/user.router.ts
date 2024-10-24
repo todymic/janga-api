@@ -1,18 +1,18 @@
 import BaseRouter from "./BaseRouter";
 import validation from "../middleware/validation";
-import {userPayload, userUpdatePayload} from "../validator/user.validator";
+import {userUpdatePayload} from "../validator/user.validator";
 import UserController from "../controller/bo/user.controller";
-import {base} from "@faker-js/faker";
-import {body} from "express-validator";
+import {registerPayload} from "../validator/auth.validator";
+import auth from "../middleware/auth";
 
 class UserRouter extends BaseRouter {
     routes() {
 
-        this.router.post('/new', validation(userPayload), UserController.create)
-        this.router.get('/', UserController.all)
-        this.router.get('/:id', UserController.getOne)
-        this.router.put('/:id', validation(userUpdatePayload), UserController.update)
-        this.router.delete('/:id', UserController.delete)
+        this.router.post('/new', auth, validation(registerPayload), UserController.create)
+        this.router.get('/', auth, UserController.all)
+        this.router.get('/:id', auth, UserController.getOne)
+        this.router.put('/:id', auth, validation(userUpdatePayload), UserController.update)
+        this.router.delete('/:id', auth, UserController.delete)
 
     }
 }
