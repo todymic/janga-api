@@ -6,6 +6,7 @@ import LanguageRouter from "./language.router";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "../docs/swagger_output.json";
 import UserRouter from "./user.router";
+import AuthRouter from "./auth.router";
 
 export class Routes {
     constructor(private app: Application) {}
@@ -17,6 +18,9 @@ export class Routes {
         this.app.use('/api/offices', OfficeRouter);
         this.app.use('/api/languages', LanguageRouter);
         this.app.use('/api/users', UserRouter);
+
+        //auth routes
+        this.app.use('/api/auth', AuthRouter);
 
         // docs API
         this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
