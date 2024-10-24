@@ -1,9 +1,9 @@
 import {Request, Response} from "express";
 import {PractitionerRepository} from "../repository/practitioner.repository";
 import CrudController from "./crud.controller";
-import {Practitioner} from "../model/Practitioner";
 import {PractitionerService} from "../services/practitioner.service";
 import {Container} from "typedi";
+import {Practitioner} from "../model/practitioner";
 
 class PractitionerController extends CrudController {
 

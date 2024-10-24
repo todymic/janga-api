@@ -1,6 +1,6 @@
 import {Column, DataType, DefaultScope, Model, Table} from "sequelize-typescript";
-import User from "./common/User";
-import {IAddress} from "./common/address";
+import User from "./user";
+import {IAddress} from "./common/address.interface";
 
 @Table({
     tableName: "patient",

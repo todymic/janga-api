@@ -1,25 +1,20 @@
 import {
-    BeforeBulkCreate, BeforeCreate,
+    BeforeCreate,
     BelongsTo,
     BelongsToMany,
     Column,
     DataType,
     DefaultScope,
     ForeignKey,
-    HasMany, HasOne,
-    Model,
     Table
 } from "sequelize-typescript";
-import {Language} from "./Language";
-import {Speciality} from "./Speciality";
-import {PractitionerSpecialities} from "./PractitionerSpecialities";
-import {PractitionerLanguages} from "./PractitionerLanguages";
-import {Office} from "./Office";
-import {User, UserInterface} from "./common/User";
+import {Speciality} from "./speciality";
+import {PractitionersSpecialities} from "./practitioners-specialities";
+import {Office} from "./office";
+import {User, UserInterface} from "./user";
 
  export interface IPractitioner extends UserInterface {
     degrees?: string[];
-    languages?: Language[] | null;
     specialities?: Speciality[] | null;
     office?: Office
 }
@@ -34,17 +29,14 @@ import {User, UserInterface} from "./common/User";
     attributes: {
         exclude: [ 'officeId', 'createdAt', 'updatedAt']
     },
-    include: [ Office, Language, Speciality ]
+    include: [ Office, Speciality ]
 }))
 
 
 export class Practitioner extends User implements IPractitioner {
 
-    @BelongsToMany(() => Language, () => PractitionerLanguages)
-    languages?: Array<Language & {PractitionerLanguages: PractitionerLanguages}>;
-
-    @BelongsToMany(() => Speciality, () => PractitionerSpecialities)
-    specialities?: Array<Speciality & { PractitionerSpecialities: PractitionerSpecialities}>;
+    @BelongsToMany(() => Speciality, () => PractitionersSpecialities)
+    specialities?: Array<Speciality & { PractitionerSpecialities: PractitionersSpecialities}>;
 
     @Column({
         type: DataType.JSON,

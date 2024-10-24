@@ -1,13 +1,10 @@
 import {Inject, Service} from "typedi";
-import {IPractitioner, Practitioner} from "../model/Practitioner";
 import {PractitionerRepository} from "../repository/practitioner.repository";
-import {Language} from "../model/Language";
-import {Speciality} from "../model/Speciality";
+import {Speciality} from "../model/speciality";
 import {SpecialityRepository} from "../repository/speciality.repository";
-import {LanguageRepository} from "../repository/language.repository";
 import {Op} from "sequelize";
-import {NotFoundException} from "../exceptions/NotFoundException";
 import {AlreadyExistException} from "../exceptions/already-exist.exception";
+import {Practitioner} from "../model/practitioner";
 
 export interface PractitionerRequest {
     firstname: string,
@@ -29,9 +26,6 @@ export class PractitionerService {
 
     @Inject()
     private practitionerRepository!: PractitionerRepository
-
-    @Inject()
-    private languageRepository!: LanguageRepository
 
     @Inject()
     private specialityRepository!: SpecialityRepository
@@ -67,37 +61,20 @@ export class PractitionerService {
 
      private async setRelations(bodyRequest: PractitionerRequest, practitioner: Practitioner): Promise<Practitioner>
      {
-        return await this.languageRepository
-            .getAll({
-                where: {
-                    id: {
-                        [Op.or]: [bodyRequest.languages]
-                    }
-                }
-            })
-            .then(async (languages: Language[]) => {
+        return this.specialityRepository
+         .getAll({
+             where: {
+                 id: {
+                     [Op.or]: [bodyRequest.specialities]
+                 }
+             }
+         })
+         .then(async(specialities: Speciality[]) => {
+             return practitioner.$set('specialities', specialities)
+                 .then(async() => {
+                     return this.practitionerRepository.getById(practitioner.id).then();
+                 });
 
-                return practitioner.$set('languages', languages)
-                    .then(async() => {
-                        // get specialities
-                        return this.specialityRepository
-                            .getAll({
-                                where: {
-                                    id: {
-                                        [Op.or]: [bodyRequest.specialities]
-                                    }
-                                }
-                            })
-                            .then(async(specialities: Speciality[]) => {
-                                return practitioner.$set('specialities', specialities)
-                                    .then(async() => {
-                                        return this.practitionerRepository.getById(practitioner.id).then();
-                                    });
-
-                            })
-                    });
-
-
-            });
+         })
     }
 }

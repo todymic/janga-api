@@ -1,6 +1,6 @@
 import {Column, DefaultScope, ForeignKey, Model, Table} from "sequelize-typescript";
-import {Practitioner} from "./Practitioner";
-import {Speciality} from "./Speciality";
+import {Practitioner} from "./practitioner";
+import {Speciality} from "./speciality";
 
 @Table({
     tableName: 'practitioners_specialities'
@@ -10,7 +10,7 @@ import {Speciality} from "./Speciality";
         exclude: [ 'createdAt', 'updatedAt']
     }
 }))
-export class PractitionerSpecialities extends Model<PractitionerSpecialities> {
+export class PractitionersSpecialities extends Model<PractitionersSpecialities> {
 
     @ForeignKey(() => Practitioner)
     @Column

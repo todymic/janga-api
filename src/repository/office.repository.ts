@@ -1,8 +1,9 @@
-import {Office} from "../model/Office";
+
 import {Service} from "typedi";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {BaseRepository} from "./base.repository";
 import {Model} from "sequelize-typescript";
+import {Office} from "../model/office";
 
 @Service()
 export class OfficeRepository extends BaseRepository<Office> {
@@ -15,11 +16,7 @@ export class OfficeRepository extends BaseRepository<Office> {
     async save(reqOffice: Office): Promise<Office> {
 
         const office = {
-            name: reqOffice.name,
-            street: reqOffice.street,
-            zipcode: reqOffice.zipcode,
-            city: reqOffice.city,
-            country: reqOffice.country,
+            name: reqOffice.name
         };
 
         return await super.save(office as Office);
@@ -35,10 +32,6 @@ export class OfficeRepository extends BaseRepository<Office> {
                 }
 
                 updatedOffice.name = office.name;
-                updatedOffice.street = office.street;
-                updatedOffice.city = office.city;
-                updatedOffice.zipcode = office.zipcode;
-                updatedOffice.country = office.country;
 
                 return updatedOffice.save();
             });

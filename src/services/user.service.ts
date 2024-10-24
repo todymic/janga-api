@@ -1,6 +1,6 @@
 import {Inject, Service} from "typedi";
 import {UserRepository} from "../repository/user.repository";
-import User from "../model/common/User";
+import User from "../model/user";
 
 
 export interface UserRequest {

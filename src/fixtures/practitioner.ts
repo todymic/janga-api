@@ -1,5 +1,4 @@
 import {faker} from "@faker-js/faker/locale/ar";
-import {Office} from "../model/Office";
 
 export function createLanguages(){
     return {

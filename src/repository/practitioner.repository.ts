@@ -1,13 +1,12 @@
-import {IPractitioner, Practitioner} from "../model/Practitioner";
-import {Office} from "../model/Office";
-import {Language} from "../model/Language";
-import {Speciality} from "../model/Speciality";
+
+
 import {Op} from "sequelize";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {Service} from "typedi";
 import {BaseRepository} from "./base.repository";
-import User from "../model/common/User";
 import {PractitionerRequest} from "../services/practitioner.service";
+import {Practitioner} from "../model/practitioner";
+import {Speciality} from "../model/speciality";
 
 interface PractitionerRepoInterface {
 

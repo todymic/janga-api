@@ -1,13 +1,12 @@
 import {Sequelize} from "sequelize-typescript";
 import dotenv from "dotenv";
-import {Practitioner} from "../model/Practitioner";
-import {PractitionerSpecialities} from "../model/PractitionerSpecialities";
-import {Language} from "../model/Language";
-import {Speciality} from "../model/Speciality";
-import {PractitionerLanguages} from "../model/PractitionerLanguages";
-import {Patient} from "../model/Patient";
-import {Office} from "../model/Office";
-import User from "../model/common/User";
+import {Practitioner} from "../model/practitioner";
+import {PractitionersSpecialities} from "../model/practitioners-specialities";
+import {Speciality} from "../model/speciality";
+import {Office} from "../model/office";
+import User from "../model/user";
+import {OfficesPractitioners} from "../model/offices-practitioners";
+import {Address} from "../model/address";
 
 dotenv.config();
 export class Database {
@@ -20,7 +19,7 @@ export class Database {
 
 
     constructor() {
-        this.connect();
+        this.connect().then();
     }
 
     public async connect() {
@@ -35,13 +34,12 @@ export class Database {
                 dialect: "postgres",
                 models: [
                     Practitioner,
-                    PractitionerSpecialities,
-                    Language,
+                    PractitionersSpecialities,
                     Speciality,
-                    PractitionerLanguages,
-                    Patient,
                     Office,
-                    User
+                    User,
+                    OfficesPractitioners,
+                    Address
                 ],
 
             });

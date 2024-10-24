@@ -1,7 +1,7 @@
 import e, {Request, Response} from "express";
 import CrudController from "./crud.controller";
 import {OfficeRepository} from "../repository/office.repository";
-import {Office} from "../model/Office";
+import {Office} from "../model/office";
 
 class OfficeController extends CrudController {
 

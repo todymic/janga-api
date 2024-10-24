@@ -1,10 +1,10 @@
 import {Inject, Service} from "typedi";
 import {UserRequest, UserService} from "./user.service";
-import User from "../model/common/User";
 import jwt, {Secret, JwtPayload} from 'jsonwebtoken';
 import {UserRepository} from "../repository/user.repository";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import bcrypt from "bcryptjs";
+import User from "../model/user";
 
 export const SECRET_KEY: Secret = '0043e385bb8c9cd1bc9be6680530a5a1a6d385b60e265a70d829f2d2011bd60f';
 

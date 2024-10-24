@@ -1,10 +1,5 @@
 import {BeforeCreate, Column, DataType, DefaultScope, HasOne, Model, Sequelize, Table} from "sequelize-typescript";
-import {Practitioner} from "../Practitioner";
-import {before} from "node:test";
 import bcrypt from "bcryptjs";
-import {Office} from "../Office";
-import {Language} from "../Language";
-import {Speciality} from "../Speciality";
 
 export interface UserInterface {
     firstname: string;

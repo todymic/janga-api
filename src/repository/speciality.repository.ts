@@ -1,8 +1,8 @@
-import {Speciality} from "../model/Speciality";
+
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {Service} from "typedi";
-import {Language} from "../model/Language";
 import {BaseRepository} from "./base.repository";
+import {Speciality} from "../model/speciality";
 
 interface SpecialityRepoInterface {
     save(reqSpeciality: Speciality): Promise<Speciality>;

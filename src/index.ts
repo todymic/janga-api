@@ -5,14 +5,6 @@ import bodyParser from "body-parser";
 
 import cors from "cors";
 import {Routes} from "./routes";
-import {Office} from "./model/Office";
-import {Language} from "./model/Language";
-import {Speciality} from "./model/Speciality";
-import {faker} from "@faker-js/faker/locale/ar";
-import {createLanguages, createOffices, createSpecialities} from "./fixtures/practitioner";
-import {Faker} from "@faker-js/faker";
-import {Practitioner} from "./model/Practitioner";
-import {OfficeRepository} from "./repository/office.repository";
 
 
 dotenv.config();

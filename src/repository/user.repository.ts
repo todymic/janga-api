@@ -1,8 +1,9 @@
-import {User} from "../model/common/User";
+
 import {BaseRepository} from "./base.repository";
 import {NotFoundException} from "../exceptions/NotFoundException";
 import {Service} from "typedi";
 import {Op} from "sequelize";
+import User from "../model/user";
 
 
 @Service()

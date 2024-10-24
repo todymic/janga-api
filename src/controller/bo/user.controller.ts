@@ -1,9 +1,9 @@
 import CrudController from "../crud.controller";
 import {Request, Response} from "express";
-import User from "../../model/common/User";
 import {UserService} from "../../services/user.service";
 import {Container} from "typedi";
 import {UserRepository} from "../../repository/user.repository";
+import User from "../../model/user";
 
 class UserController extends CrudController {
 

@@ -1,6 +1,6 @@
 import {body, query} from "express-validator";
-import User from "../model/common/User";
 import {AlreadyExistException} from "../exceptions/already-exist.exception";
+import User from "../model/user";
 
 export const loginPayload = [
     body('email')

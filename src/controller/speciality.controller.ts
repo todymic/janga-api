@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {SpecialityRepository} from "../repository/speciality.repository";
 import CrudController from "./crud.controller";
-import {Speciality} from "../model/Speciality";
+import {Speciality} from "../model/speciality";
 
 class SpecialityController extends CrudController {
     async update(req: Request, res: Response) {
